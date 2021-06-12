@@ -11,11 +11,14 @@ import productsReducer from './store/reducers/products'
 import categoriesReducer from './store/reducers/categories'
 import cartsReducer from './store/reducers/cart'
 import ordersReducer from './store/reducers/orders'
+import Toast from 'react-native-toast-message'
+import filterFLight from './store/reducers/flights'
 const rootReducer = combineReducers({
   products : productsReducer,
   categories: categoriesReducer,
   carts: cartsReducer,
-  orders: ordersReducer
+  orders: ordersReducer,
+  flights: filterFLight
 });
 LogBox.ignoreLogs(['Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).']);
 const fetchFonts = () =>{
@@ -24,7 +27,7 @@ const fetchFonts = () =>{
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
   })
 }
- const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default function App() {
   
 
@@ -35,6 +38,7 @@ if(!isLoaded){
   return (
     <Provider store={store}>
         <AppNavigator />
+        <Toast ref={(ref) => Toast.setRef(ref)} />
     </Provider>
   );
 }
