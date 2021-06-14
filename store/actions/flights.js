@@ -6,6 +6,7 @@ export const SET_FLIGHT = 'SET_FLIGHT'
 export const fetchFilterFlight = () =>{
     return async dispatch =>{
         try {
+            console.log('da chay vao fetchFilterFlight')
             const response = await fetch('http://tracuu.alsc.com.vn/api/FlightImpApi/GetAllFlight',
             {
                 method: "GET",

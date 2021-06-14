@@ -44,7 +44,7 @@ export const isYesterday = date => date.isSame(moment().subtract(1, 'days').star
 export const formatDateForSubtitle = (d) => {
   if (!d.format) {
     if (d.from === startOf10YearsAgo) { return 'All time'; }
-    return `${dateWithDots(d.from)} - ${dateWithDots(d.to)}`;
+    return `${dateWithDots(d.from)}`;
   } return dateWithDots(d);
 };
 export const formatDateForPie = (d) => {
