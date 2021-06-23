@@ -41,7 +41,7 @@ const QRScanScreen = props =>{
     };
     const loadConfigs = useCallback(async () => {
         const type = await AsyncStorage.getItem("selected");
-        console.log('-----------------'+type);
+      
         if(type==1){
             setTitleText("Vị Trí : Cổng Vào T1");
         }

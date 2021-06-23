@@ -18,7 +18,7 @@ const CategoriesScreen = props => {
         setSelectedTabIndex(index)
     }
     const onSelectCategory = (id) =>{
-        console.log(id);
+      
         props.navigation.navigate('CategoryEditor', { catId: id });
       }
     return(

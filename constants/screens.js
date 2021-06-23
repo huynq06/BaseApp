@@ -18,6 +18,10 @@ export default {
     UserProduct:'UserProduct',
     EditProduct:'EditProduct',
 
+    FLightRoot: 'FlightRoot',
+    FLights: 'Flights',
+    FlightDetail: 'FlightDetail',
+
     ScanRoot:'ScanRoot',
     ScanHome: 'ScanHome',
     DockExp:'DockExp',

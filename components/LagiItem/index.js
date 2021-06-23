@@ -9,7 +9,8 @@ import { dateWithTime } from '../../utils/dateHelpers';
 import Separator from '../Separator';
 import  colors  from '../../styles/colors';
 import moment from 'moment';
-const FLightItem = props => {
+import LagiStatus from '../LagiStatus';
+const LagiItem = props => {
     return (
         <View>
           <TouchableItem onPress={props.onPress} style={s.container}>
@@ -23,12 +24,12 @@ const FLightItem = props => {
             </View>
             <View style={s.mainContentContainer}>
               <Text style={s.title}>
-                  {props.entity.code + props.entity.flightNo}
+                  {props.entity.mawb+'/' + props.entity.hawb}
               </Text>
-              <Text style={s.date}>STD:{props.entity.ScheTime} | {moment(props.entity.ScheDate).format('DD.MM.YYYY')}</Text>
-              <Text style={s.date}>ATD:{props.entity.landTime} | {moment(props.entity.landDate).format('DD.MM.YYYY')}</Text>
+              <Text style={s.date}>PIECES:{props.entity.piecesReceived} | {props.entity.piecesExpected}</Text>
+              <Text style={s.date}>WEIGHT:{props.entity.weightReceived} | {props.entity.weightExpected}</Text>
             </View>
-          
+            <LagiStatus type ={props.entity.statusGoods} text={props.entity.statusGoods} />
           </TouchableItem>    
   
     </View>
@@ -36,4 +37,4 @@ const FLightItem = props => {
     
 }
 
-export default FLightItem;
+export default LagiItem;

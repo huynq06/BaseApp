@@ -5,9 +5,10 @@ import OrdersNavigator from '../navigators/OrdersNavigator'
 import AdminNavigator from '../navigators/AdminNavigator'
 import ScanNavigator from '../navigators/ScanNavigator'
 import SettingsNavigator from '../navigators/SettingsNavigator'
+import FlightNavigator from '../navigators/FlightNavigator'
 const Routes = {
-  [screens.ScanRoot]:{
-    screen:ScanNavigator
+  [screens.FLightRoot]:{
+    screen:FlightNavigator
   }
   ,
   [screens.ProductsRoot]: {

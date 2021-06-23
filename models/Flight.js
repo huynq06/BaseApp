@@ -1,5 +1,6 @@
 class Flight {
-    constructor(code,flightNo, ScheDate,ScheTime,landDate,landTime,flightType) {
+    constructor(id,code,flightNo, ScheDate,ScheTime,landDate,landTime,flightType) {
+      this.id = id;
       this.code = code;
       this.flightNo = flightNo;
       this.ScheDate = ScheDate;

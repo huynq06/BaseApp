@@ -78,8 +78,7 @@ const SettingsScreen = props =>{
       const ConfigOK = () => {
         _storeDataSelected(type);
         _storeDataApi(APILink);
-        console.log(type);
-        console.log(APILink);
+  
         global.configddl = selectedValue;
         global.configAPI = APILink;
         Alert.alert(

@@ -9,121 +9,107 @@ import CategoriesList from '../../components/CategoriesList/index'
 import * as dimensions from '../../styles/dimensions'
 import * as scalingUtils from '../../styles/scalingUtils'
 import DateFilter from '../../components/DateFilter/index';
-
+import FLightItem from '../../components/FlightItem'
 import Subtitle from '../../components/Subtitle/index'
 import moment from 'moment';
 const FlightImpsScreen = props =>{
-
   const [isVisibleModalFlightCode,setVisibleModalFlightCode] = useState(false);
   const [isVisibleModalFlightNo,setVisibleModalFlightNo] = useState(false);
-  const [dateForFiltering,setDateForFiltering] = useState(new Date());
-
-console.log(dateForFiltering);
-
-  const [isSelectedFlightNo,setSelectedFlightNo] = useState(false);
   const [isSelectedCode,setSelectedCode] = useState(false);
+  const [isSelectedFlightNo,setSelectedFlightNo] = useState(false);
   const [listFligtNumbers,setListFlightNumber] = useState([])
-
-    const [flightCode,setFlightCode] = useState('');
-    const [flightNo,setFlightNo] = useState('CHỌN SỐ HIỆU');
-    const filterFlights = useSelector(state => state.flights.filterFlights);
-    const flights = useSelector(state => state.flights.flights);
-
-    const loadfilterFlights = useCallback(async () => {
-    
-      try {
-        await dispatch(flightsActions.fetchFilterFlight());
-      } catch (err) {
-        console.log(err.message);
-      }
-    
-    }, [dispatch]);
-   
-  
-    const getFlightCodes = () =>{
-   
-         const listCode = [];
-    
-         for(const index in filterFlights){
-            const flight = filterFlights[index];
-             if(!listCode.some(c=>c.name==flight.code)){
-               var name = flight.code;
-               var id = index;
-                listCode.push({id,name});
-             }
-         }
-         return listCode;
-     }
- 
-     const flightCodes = getFlightCodes();
-    
-      useEffect(() => {
-       
-        const flightsNumber = getLightsNumber();
-        setListFlightNumber(flightsNumber);
-   
-      }, [flightCode]);
+  const [flightCode,setFlightCode] = useState('');
+  const [flightNo,setFlightNo] = useState('');
+  const [dateForFiltering,setDateForFiltering] = useState(new Date());
+  const flights = useSelector(state => state.flights.flights);
+  const filterFlights = useSelector(state => state.flights.filterFlights);
+  const filterFlightsCode = useSelector(state => {
+    const listCode = [];
+    for(const index in state.flights.filterFlights){
      
-     const onChangeFlighCode = (index) => {
-      
-     var flight = flightCodes.find(c=>c.id==index);
-     const code = flight.name;
-     setFlightCode(code);
-   
-     setSelectedCode(true);
-     
-    
-        onToggleModalFlightCode();
-      
-      } 
-      useEffect(() => {
-        dispatch(flightsActions.fetchFlights(flightCode,flightNo,moment(dateForFiltering).format('DD/MM/YYYY')));
-   
-      }, [dispatch,flightCode,flightNo,dateForFiltering]);
-
-   
-
-      useEffect(() => {
-     
-   
-      },[dateForFiltering]);
-      const onChangeFlighNumber = (index) => {
-        onToggleModalFlightNo();
-        var flight = listFligtNumbers.find(c=>c.id==index);
-        const number = flight.name;
-        setFlightNo(number);
-        setSelectedFlightNo(true);
-      } 
-     const onToggleModalFlightNo = () =>{
-        setVisibleModalFlightNo(prev => !prev);
-      } 
-      const onToggleCalendar = () =>{
-        toggleCalendar(prev=>!prev);
-      }
-      const onToggleModalFlightCode = () =>{
-        loadfilterFlights();
-        setVisibleModalFlightCode(prev => !prev);
-      }   
-    const getLightsNumber = () =>{
-        const listFlightNumber = [];
-        if(flightCode===''){
-            return listFlightNumber;
+       const flight = state.flights.filterFlights[index];
+        if(!listCode.some(c=>c.name==flight.code)){
+          var name = flight.code;
+          var id = index;
+           listCode.push({id,name});
         }
-        for(const index in filterFlights){
-            if(filterFlights[index].code === flightCode){
-              const id = index;
-              const name = filterFlights[index].flightNo
-                listFlightNumber.push({id,name})
-            }
-        }
-        return listFlightNumber;
     }
-   
-    const dispatch = useDispatch();
-    useEffect(() => {
-       dispatch(flightsActions.fetchFilterFlight());
-      }, [dispatch]);
+    return listCode;
+  });
+
+  const dispatch = useDispatch();
+  const onToggleModalFlightCode = () =>{
     
+    loadfilterFlights().then(() => {
+    });
+    setVisibleModalFlightCode(prev => !prev);
+  }   
+  const onToggleModalFlightNo = () =>{
+    setVisibleModalFlightNo(prev => !prev);
+  } 
+ 
+
+  const loadFlightsNumber = useCallback(async (code) => {
+    const listFlightNumber = [];
+    for(const index in filterFlights){
+    
+      if(filterFlights[index].code === code){
+        const id = index;
+        const name = filterFlights[index].flightNo
+          listFlightNumber.push({id,name})
+      }
+  }
+  setListFlightNumber(listFlightNumber);
+  }, [filterFlights]);
+  const loadfilterFlights = useCallback(async () => {
+    try {
+      await dispatch(flightsActions.fetchFilterFlight());
+    } catch (err) {
+      
+    }
+  
+  }, [dispatch]);
+  const loadFlights = useCallback(async (code,number,date) => {
+    try {
+      await dispatch(flightsActions.fetchFlights(code,number,date));
+    } catch (err) {
+      
+    }
+  
+  }, [dispatch]);
+  const onChangeFlighCode = (index) => {
+    var flight = filterFlightsCode.find(c=>c.id==index);
+    const code = flight.name;
+    setFlightCode(code);
+    setSelectedCode(true);
+    setFlightNo('');
+    onToggleModalFlightCode();
+    loadFlightsNumber(code);
+    setTimeout(() => {
+      loadFlights(code,'',moment(dateForFiltering).format('DD/MM/YYYY'))
+        }, 100);
+  
+     } 
+     const onChangeFlighNumber = (index) => {
+      onToggleModalFlightNo();
+      var flight = listFligtNumbers.find(c=>c.id==index);
+      const number = flight.name;
+      setFlightNo(number);
+      setSelectedFlightNo(true);
+      loadFlights(flightCode,number,moment(dateForFiltering).format('DD/MM/YYYY'))
+    }    
+    const selectItemHandler = (id, title) => {
+    
+      props.navigation.navigate('FlightDetail', {
+        flightID: id,
+        flightTitle: title
+      });
+    };
+  useEffect(() => {
+ 
+    loadFlights(flightCode,flightNo,moment(dateForFiltering).format('DD/MM/YYYY'))
+  }, [flightCode,flightNo,dateForFiltering]);
+
     return (
         <View style={styles.root}>
         <ScreenWrapper>
@@ -135,7 +121,6 @@ console.log(dateForFiltering);
                       containerStyle={styles.selectorContainer}
                       isSelected={isSelectedCode}
                       value={flightCode}
-                  
                       onPress={onToggleModalFlightCode}
             />
              <FormInput
@@ -147,17 +132,17 @@ console.log(dateForFiltering);
                       // icon={categoryIcon}
                       onPress={onToggleModalFlightNo}
                     />
-            {/* <DateFilter
+                       <DateFilter
           dateForFiltering={dateForFiltering}
           setDateForFiltering={setDateForFiltering}
-        /> */}
+        />
             </View>
             <Subtitle
-          style={styles.subtitle}
-          withLittlePadding
-          leftText="Flights"
-          date={dateForFiltering}
-        />
+              style={styles.subtitle}
+              withLittlePadding
+              leftText="Flights"
+              date={dateForFiltering}
+           />
         <Separator withShadow />
             <View>
          
@@ -166,31 +151,34 @@ console.log(dateForFiltering);
             <Separator withShadow />   
             <FlatList
     
-      data={flights}
-      keyExtractor={item => item.ScheDate}
-      renderItem={itemData => (
-        <View>
-          <Text>{itemData.item.code}</Text>
-          <Text>{itemData.item.ScheDate}</Text>
-        </View>
-      )}
+    data={flights}
+    keyExtractor={item => item.id}
+    renderItem={itemData => (
+      <FLightItem
+      id={itemData.item.id}
+      entity = {itemData.item}
+      onPress={() => {selectItemHandler(itemData.item.id, itemData.item.code+itemData.item.flightNo)}}
+    
     />
+    )}
+    ItemSeparatorComponent={Separator}
+  />
        
         </ScreenWrapper>
-    <CategoriesList
+        <CategoriesList
       isModal
       isVisible={isVisibleModalFlightCode}
-      categories={flightCodes}
-      onSelect={onChangeFlighCode}
+      categories={filterFlightsCode}
+       onSelect={onChangeFlighCode}
       onToggleModal={onToggleModalFlightCode}
     />    
-    <CategoriesList
+  <CategoriesList
       isModal
       isVisible={isVisibleModalFlightNo}
       categories={listFligtNumbers}
       onSelect={onChangeFlighNumber}
       onToggleModal={onToggleModalFlightNo}
-    />    
+    />  
 
     </View>
     )

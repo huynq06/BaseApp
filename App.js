@@ -11,6 +11,7 @@ import productsReducer from './store/reducers/products'
 import categoriesReducer from './store/reducers/categories'
 import cartsReducer from './store/reducers/cart'
 import ordersReducer from './store/reducers/orders'
+import lagisReducer from './store/reducers/lagis'
 import Toast from 'react-native-toast-message'
 import filterFLight from './store/reducers/flights'
 const rootReducer = combineReducers({
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   categories: categoriesReducer,
   carts: cartsReducer,
   orders: ordersReducer,
-  flights: filterFLight
+  flights: filterFLight,
+  lagis: lagisReducer
 });
 LogBox.ignoreLogs(['Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).']);
 const fetchFonts = () =>{

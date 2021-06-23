@@ -17,11 +17,11 @@ const ScanGateInScreen = props =>{
     const inputRef = useRef();
    
   const acresFocus = () => {
-      console.log('da chay vao focus')
+  
       inputRef.current.focus();
   };
     const onSubmit = () => {
-        console.log('done')
+     
         setBarcode('');
         setTimeout(() => {
             acresFocus();
